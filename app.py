@@ -13,15 +13,17 @@ def user():
   #driver = driversetup()
   
   return  'Hello from Koyeb'
- 
- @app.route('/gets', methods=["POST"])
- def gets():
+@app.route('/gets', methods=["POST"])
+def gets():
    global ld
-   data = 
+   data = request.get_json()
    s = data['s']
    return ld[s]
      
-@pp.route('/getd')
+@app.route('/getd')
 def getd():
   global ld
   return ld
+@app.route('/')
+def u(): 
+  return "ndbdbdbndndb"

@@ -5,7 +5,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-
+app = Flask(__name__)
 def driversetup():
     options = webdriver.ChromeOptions()
     options.add_argument('--headless')  # Run Selenium in headless mode
@@ -21,13 +21,15 @@ def driversetup():
     driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined});")
     return driver
     
-app = Flask(__name__)
+
+ 
  
 @app.route('/y')
 def y():
   driver = driversetup()
   
   return  'Hello from Koyeb'
+  
 ld={} 
 @app.route('/user', methods=["POST"])
 def user():
@@ -40,6 +42,7 @@ def user():
   #driver = driversetup()
   
   return  'Hello from Koyeb'
+  
 @app.route('/gets', methods=["POST"])
 def gets():
    global ld
@@ -47,10 +50,12 @@ def gets():
    s = data['s']
    return ld[s]
      
+     
 @app.route('/getd')
 def getd():
   global ld
   return ld
 @app.route('/')
 def u(): 
+  driver = driversetup()
   return "ndbdbdbndndb"

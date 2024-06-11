@@ -1,11 +1,11 @@
 from flask import Flask, request, jsonify
-#from flask import Flask
 from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 
 app = Flask(__name__)
+
+# Global dictionary to store user data
+ld = {}
+
 def driversetup():
     options = webdriver.ChromeOptions()
     options.add_argument('--headless')  # Run Selenium in headless mode
@@ -20,42 +20,37 @@ def driversetup():
     driver = webdriver.Chrome(options=options)
     driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined});")
     return driver
-    
 
- 
- 
-@app.route('/y')
-def y():
-  driver = driversetup()
-  
-  return  'Hello from Koyeb'
-  
-ld={} 
-@app.route('/user', methods=["POST"])
-def user():
-  global ld
-  data = request.get_json()
-  s=data['s']
-  d=data['d']
-  ld[s]=d
-  
-  #driver = driversetup()
-  
-  return  'Hello from Koyeb'
-  
-@app.route('/gets', methods=["POST"])
-def gets():
-   global ld
-   data = request.get_json()
-   s = data['s']
-   return ld[s]
-     
-     
-@app.route('/getd')
-def getd():
-  global ld
-  return ld
 @app.route('/')
-def u(): 
-  driver = driversetup()
-  return "ndbdbdbndndb"
+def home(): 
+    driver = driversetup()
+    return "Hello from Koyeb"
+
+@app.route('/user', methods=["POST"])
+def add_user():
+    global ld
+    data = request.get_json()
+    s = data['s']
+    d = data['d']
+    ld[s] = d
+    return 'User data added successfully'
+
+@app.route('/gets', methods=["POST"])
+def get_user():
+    global ld
+    data = request.get_json()
+    s = data['s']
+    if s in ld:
+        return jsonify({s: ld[s]})
+    else:
+        return jsonify({"error": "User not found"}), 404
+
+@app.route('/getd')
+def get_all_users():
+    global ld
+    return jsonify(ld)
+
+@app.route('/y')
+def y_route():
+    driver = driversetup()
+    return 'Hello from Koyeb'
